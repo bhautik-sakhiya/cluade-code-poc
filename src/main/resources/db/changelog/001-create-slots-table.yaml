@@ -1,0 +1,50 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-slots-table
+      author: system
+      changes:
+        - createTable:
+            tableName: slots
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: doctor_id
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: date
+                  type: DATE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: start_time
+                  type: TIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end_time
+                  type: TIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: VARCHAR(20)
+                  defaultValue: AVAILABLE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: slots
+            columnNames: doctor_id, date, start_time, end_time
+            constraintName: uq_slot_doctor_datetime

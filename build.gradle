@@ -1,0 +1,95 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '4.0.6'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.sonarqube' version '6.2.0.5505'
+    id 'jacoco'
+}
+
+def localEnv = [:]
+def envFile = new File(rootDir, '.env')
+if (envFile.exists()) {
+    envFile.eachLine { line ->
+        line = line.trim()
+        if (line && !line.startsWith('#') && line.contains('=')) {
+            def idx = line.indexOf('=')
+            localEnv[line.substring(0, idx).trim()] = line.substring(idx + 1).trim()
+        }
+    }
+}
+def sonarToken = System.getenv('SONAR_TOKEN') ?: localEnv['SONAR_TOKEN'] ?: ''
+def sonarHostUrl = System.getenv('SONAR_HOST_URL') ?: localEnv['SONAR_HOST_URL'] ?: 'http://localhost:9000'
+
+if (sonarToken) System.setProperty('sonar.login', sonarToken)
+System.setProperty('sonar.host.url', sonarHostUrl)
+
+group = 'org.poc'
+version = '0.0.1-SNAPSHOT'
+description = 'claudeCode poc'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-liquibase'
+    implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'com.smartsensesolutions:commons-dao:1.0.7'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.8'
+    runtimeOnly 'com.h2database:h2'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-liquibase-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    testCompileOnly 'org.projectlombok:lombok'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testRuntimeOnly 'com.h2database:h2'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+}
+
+jacoco {
+    toolVersion = '0.8.12'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
+sonar {
+    properties {
+        property 'sonar.projectKey', 'claudeCode-poc'
+        property 'sonar.projectName', 'claudeCode POC'
+        property 'sonar.host.url', sonarHostUrl
+        property 'sonar.coverage.jacoco.xmlReportPaths', "${layout.buildDirectory.get()}/reports/jacoco/test/jacocoTestReport.xml"
+        property 'sonar.java.source', '21'
+        property 'sonar.sourceEncoding', 'UTF-8'
+        property 'sonar.scm.disabled', 'true'
+    }
+}
+
+tasks.named('sonar') {
+    dependsOn jacocoTestReport
+}

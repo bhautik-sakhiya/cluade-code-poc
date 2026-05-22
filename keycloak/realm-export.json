@@ -1,0 +1,103 @@
+{
+  "realm": "medical-appointment",
+  "enabled": true,
+  "displayName": "Medical Appointment System",
+  "registrationAllowed": false,
+  "resetPasswordAllowed": true,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "ssoSessionMaxLifespan": 36000,
+  "accessTokenLifespan": 1800,
+  "roles": {
+    "realm": [
+      {
+        "name": "DOCTOR",
+        "description": "Medical doctor — can manage slots and appointments",
+        "composite": false,
+        "clientRole": false
+      },
+      {
+        "name": "PATIENT",
+        "description": "Patient — can view slots and book appointments",
+        "composite": false,
+        "clientRole": false
+      },
+      {
+        "name": "ADMIN",
+        "description": "System administrator",
+        "composite": false,
+        "clientRole": false
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "medical-app",
+      "name": "Medical Appointment App",
+      "description": "Frontend client / Postman testing",
+      "enabled": true,
+      "publicClient": true,
+      "directAccessGrantsEnabled": true,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "serviceAccountsEnabled": false,
+      "authorizationServicesEnabled": false,
+      "redirectUris": ["*"],
+      "webOrigins": ["*"],
+      "protocol": "openid-connect",
+      "attributes": {
+        "post.logout.redirect.uris": "*"
+      }
+    }
+  ],
+  "users": [
+    {
+      "username": "doctor1",
+      "email": "doctor1@medical.com",
+      "firstName": "John",
+      "lastName": "Smith",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "doctor123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["DOCTOR"]
+    },
+    {
+      "username": "patient1",
+      "email": "patient1@medical.com",
+      "firstName": "Jane",
+      "lastName": "Doe",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "patient123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["PATIENT"]
+    },
+    {
+      "username": "admin1",
+      "email": "admin1@medical.com",
+      "firstName": "System",
+      "lastName": "Admin",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "admin123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["ADMIN", "DOCTOR", "PATIENT"]
+    }
+  ]
+}

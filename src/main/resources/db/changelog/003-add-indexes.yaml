@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003-add-indexes
+      author: system
+      changes:
+        - addIndex:
+            tableName: appointments
+            indexName: idx_appointments_patient_id
+            columns:
+              - column:
+                  name: patient_id
+        - addIndex:
+            tableName: appointments
+            indexName: idx_appointments_slot_id
+            columns:
+              - column:
+                  name: slot_id
+        - addIndex:
+            tableName: appointments
+            indexName: idx_appointments_status
+            columns:
+              - column:
+                  name: status
+        - addIndex:
+            tableName: slots
+            indexName: idx_slots_doctor_id
+            columns:
+              - column:
+                  name: doctor_id
+        - addIndex:
+            tableName: slots
+            indexName: idx_slots_date
+            columns:
+              - column:
+                  name: date

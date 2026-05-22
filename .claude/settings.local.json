@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -v -u admin:admin \"http://localhost:9000/api/projects/search\")",
+      "Bash(./gradlew sonar *)",
+      "Bash(jar -tf /home/bhautik/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-autoconfigure/4.0.6/95db07bd446a6bc10e791a1502a0c542a81872d1/spring-boot-autoconfigure-4.0.6.jar)",
+      "Bash(xargs -I{} sh -c 'jar -tf {} 2>/dev/null | grep -qi \"WebMvcRegistrations\" && echo {}')",
+      "Bash(jar -tf /home/bhautik/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-webmvc/4.0.6/2a5877540d8f8bd4df5071d1848fc0a30384117b/spring-boot-webmvc-4.0.6.jar)",
+      "Bash(JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64 ./gradlew test)",
+      "Bash(JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64 ./gradlew test --tests \"org.poc.claudecodepoc.controller.SlotControllerTest\")",
+      "WebFetch(domain:github.com)",
+      "Bash(gh repo *)"
+    ]
+  }
+}
